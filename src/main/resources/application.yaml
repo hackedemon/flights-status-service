@@ -1,0 +1,7 @@
+# Configuration file for all common and default values.
+spring:
+  application:
+    name: flights-status-service
+
+server:
+  port: 6789
