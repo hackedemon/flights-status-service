@@ -4,45 +4,43 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * Flight entity to store flight related data.
  */
 @Getter
 @Entity
-public class Flight {
-    @Id
+public class Flight implements Serializable {
     @Setter
+    @Id
+    @NotBlank(message = "Flight number can't be null")
     private String flightNumber;
 
     @Setter
     @ManyToOne
     @JoinColumn(name = "departure_airport_code")
+    @NotNull(message = "Departure airport is mandatory")
     private Airport departureAirport;
 
     @Setter
     @ManyToOne
     @JoinColumn(name = "arrival_airport_code")
+    @NotNull(message = "Arrival airport is mandatory.")
     private Airport arrivalAirport;
 
-    private LocalDate departureDate;
-    private LocalDate arrivalDate;
-    private LocalTime departureTime;
-    private LocalTime arrivalTime;
+    private final LocalDateTime lastUpdateDateTime;
 
-    public void setDepartureDateTime(LocalDateTime departureDateTime) {
-        this.departureDate = departureDateTime.toLocalDate();
-        this.departureTime = departureDateTime.toLocalTime();
-    }
-
-    public void setArrivalDateTime(LocalDateTime arrivalDateTime) {
-        this.arrivalDate = arrivalDateTime.toLocalDate();
-        this.arrivalTime = arrivalDateTime.toLocalTime();
+    /**
+     * Constructor to set lastUpdate value to now.
+     */
+    public Flight() {
+        this.lastUpdateDateTime = LocalDateTime.now();
     }
 }
