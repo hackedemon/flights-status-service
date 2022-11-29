@@ -23,6 +23,7 @@ public class DefaultFlightOrchestrator implements FlightOrchestrator {
                 .arrivalDateTime(flightSchedule.getArrivalDateTime())
                 .departureAirportCode(flightSchedule.getFlight().getDepartureAirport().getCode())
                 .departureDateTime(flightSchedule.getDepartureDateTime())
+                .flightNumber(flightSchedule.getFlight().getFlightNumber())
                 .build();
         return ResponseEntity.ok(flightStatus);
     }
