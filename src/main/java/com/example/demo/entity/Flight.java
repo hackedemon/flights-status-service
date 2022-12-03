@@ -24,15 +24,15 @@ public class Flight implements Serializable {
     private String flightNumber;
 
     @Setter
+    @NotNull(message = "Departure airport is mandatory")
     @ManyToOne
     @JoinColumn(name = "departure_airport_code")
-    @NotNull(message = "Departure airport is mandatory")
     private Airport departureAirport;
 
     @Setter
+    @NotNull(message = "Arrival airport is mandatory.")
     @ManyToOne
     @JoinColumn(name = "arrival_airport_code")
-    @NotNull(message = "Arrival airport is mandatory.")
     private Airport arrivalAirport;
 
     private final LocalDateTime lastUpdateDateTime;

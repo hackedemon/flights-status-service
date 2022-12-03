@@ -19,4 +19,6 @@ public interface FlightScheduleService {
      */
     FlightSchedule getFlightSchedule(String flightNumber, LocalDate departureDate)
             throws FlightNotFoundException, FlightScheduleNotFoundException;
+
+    void addFlightSchedule(FlightSchedule flightSchedule);
 }
