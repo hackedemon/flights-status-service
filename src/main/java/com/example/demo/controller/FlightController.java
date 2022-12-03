@@ -17,7 +17,7 @@ import java.util.Map;
 
 public interface FlightController {
     @Operation(
-            operationId = "getFligthStatus",
+            operationId = "getFlightStatus",
             summary = "Returns flight status based on flight number and travel date.",
             description = "Returns flight status based on flight number and travel date.",
             tags = {"Public"}
@@ -100,18 +100,11 @@ public interface FlightController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = """
-                                    Returns response status in body for flight number and travel date passed.
-                                    In case details are not found then not found error response is returned.
-                                    """,
-                            content = {
-                                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(implementation = FlightStatus.class))
-                            }
+                            description = "Empty body is returned when airport is added successfully."
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Request parameters are not valid.",
+                            description = "Request parameters are not valid. Or airport already exists.",
                             content = {
                                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             schema = @Schema(
@@ -119,25 +112,8 @@ public interface FlightController {
                                                             {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 400,
-                                                                "message": "travelDate value 2 is invalid.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2"
-                                                            }
-                                                            """
-                                            ))
-                            }
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "When flight number and/or travel date combination is not found.",
-                            content = {
-                                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(
-                                                    example = """
-                                                            {
-                                                                "timeStamp": "2022-12-01T17:23:37.442225800Z",
-                                                                "status": 404,
-                                                                "message": "No flight exists with flight number: 124",
-                                                                "path": "uri=/flight/status/flightNumber/124/travelDate/2000-12-12"
+                                                                "message": "Can't add airport with code DUS as it already exists. Use update method instead.",
+                                                                "path": "uri=/v1/flight/v1/airport"
                                                             }
                                                             """
                                             ))
@@ -154,7 +130,7 @@ public interface FlightController {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 500,
                                                                 "message": "Some error occured while handling the request.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2000-12-12"
+                                                                "path": "uri=/v1/flight/v1/airport"
                                                             }
                                                             """
                                             ))
@@ -174,14 +150,11 @@ public interface FlightController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = """
-                                    Returns response status in body for flight number and travel date passed.
-                                    In case details are not found then not found error response is returned.
-                                    """
+                            description = "Empty body is returned when added new flight successfully."
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Request parameters are not valid.",
+                            description = "Request parameters are not valid. Or flight already exists. Or airport doesn't exist.",
                             content = {
                                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             schema = @Schema(
@@ -189,25 +162,8 @@ public interface FlightController {
                                                             {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 400,
-                                                                "message": "travelDate value 2 is invalid.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2"
-                                                            }
-                                                            """
-                                            ))
-                            }
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "When flight number and/or travel date combination is not found.",
-                            content = {
-                                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(
-                                                    example = """
-                                                            {
-                                                                "timeStamp": "2022-12-01T17:23:37.442225800Z",
-                                                                "status": 404,
-                                                                "message": "No flight exists with flight number: 124",
-                                                                "path": "uri=/flight/status/flightNumber/124/travelDate/2000-12-12"
+                                                                "message": "No airport found for code string.",
+                                                                "path": "uri=/v1/flight/v1/flight"
                                                             }
                                                             """
                                             ))
@@ -223,8 +179,8 @@ public interface FlightController {
                                                             {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 500,
-                                                                "message": "Some error occured while handling the request.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2000-12-12"
+                                                                "message": "Some error occurred while handling the request.",
+                                                                "path": "uri=/v1/flight/v1/flight"
                                                             }
                                                             """
                                             ))
@@ -244,14 +200,13 @@ public interface FlightController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = """
-                                    Returns response status in body for flight number and travel date passed.
-                                    In case details are not found then not found error response is returned.
-                                    """
+                            description = "Empty body is returned when adding flight schedule is successful."
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Request parameters are not valid.",
+                            description = """
+                                    Request parameters are not valid. Or flight and departure date time already exists. Or flight doesn't exist.
+                                    """,
                             content = {
                                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             schema = @Schema(
@@ -259,25 +214,8 @@ public interface FlightController {
                                                             {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 400,
-                                                                "message": "travelDate value 2 is invalid.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2"
-                                                            }
-                                                            """
-                                            ))
-                            }
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "When flight number and/or travel date combination is not found.",
-                            content = {
-                                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                            schema = @Schema(
-                                                    example = """
-                                                            {
-                                                                "timeStamp": "2022-12-01T17:23:37.442225800Z",
-                                                                "status": 404,
-                                                                "message": "No flight exists with flight number: 124",
-                                                                "path": "uri=/flight/status/flightNumber/124/travelDate/2000-12-12"
+                                                                "message": "No flight found with flight number EW 015",
+                                                                "path": "uri=/v1/flight/v1/flightSchedule"
                                                             }
                                                             """
                                             ))
@@ -293,8 +231,8 @@ public interface FlightController {
                                                             {
                                                                 "timeStamp": "2022-12-01T17:23:37.442225800Z",
                                                                 "status": 500,
-                                                                "message": "Some error occured while handling the request.",
-                                                                "path": "uri=/flight/status/flightNumber/EW/travelDate/2000-12-12"
+                                                                "message": "Some error occurred while handling the request.",
+                                                                "path": "uri=/v1/flight/v1/flightSchedule"
                                                             }
                                                             """
                                             ))
@@ -314,10 +252,7 @@ public interface FlightController {
             value = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = """
-                                    Returns response status in body for flight number and travel date passed.
-                                    In case details are not found then not found error response is returned.
-                                    """
+                            description = "Empty body is returned when updating flight schedule is successful."
                     ),
                     @ApiResponse(
                             responseCode = "400",
