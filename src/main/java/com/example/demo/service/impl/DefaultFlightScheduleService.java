@@ -40,7 +40,7 @@ public class DefaultFlightScheduleService implements FlightScheduleService {
     }
 
     @Override
-    public void addFlightSchedule(FlightSchedule flightSchedule) {
+    public void addFlightSchedule(FlightSchedule flightSchedule) throws FlightScheduleAlreadyExistsException {
         if (Boolean.FALSE.equals(Objects.isNull(
                 repository.getFlightScheduleByFlightAndDepartureDateAndDepartureTime(
                         flightSchedule.getFlight(),
@@ -52,6 +52,24 @@ public class DefaultFlightScheduleService implements FlightScheduleService {
                             + " and departure datetime "
                             + flightSchedule.getDepartureDateTime()
                             + " again because it already exists.");
+        }
+
+        repository.save(flightSchedule);
+    }
+
+    @Override
+    public void updateFlightSchedule(FlightSchedule flightSchedule) throws FlightScheduleNotFoundException {
+        if (Objects.isNull(
+                repository.getFlightScheduleByFlightAndDepartureDateAndDepartureTime(
+                        flightSchedule.getFlight(),
+                        LocalDate.from(flightSchedule.getDepartureDateTime()),
+                        LocalTime.from(flightSchedule.getDepartureDateTime())))) {
+            throw new FlightScheduleNotFoundException(
+                    "Can't update flight schedule for flight number "
+                            + flightSchedule.getFlight().getFlightNumber()
+                            + " and departure datetime "
+                            + flightSchedule.getDepartureDateTime()
+                            + " again because this combination doesn't exists. Use add method to add new value.");
         }
 
         repository.save(flightSchedule);

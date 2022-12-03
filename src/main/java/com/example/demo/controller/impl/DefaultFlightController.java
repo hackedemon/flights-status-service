@@ -50,9 +50,9 @@ public class DefaultFlightController implements FlightController {
     }
 
     @Override
-    @PatchMapping(value = "v1/flightSchedule/{flightNumber}")
+    @PatchMapping(value = "v1/flightSchedule/flightNumber/{flightNumber}/departureDate/{departureDate}")
     public ResponseEntity<Void> updateFlightSchedule(
-            @PathVariable String flightNumber, @RequestBody Map<String, Object> updatedValues) {
-        return orchestrator.updateFlightSchedule(flightNumber, updatedValues);
+            @PathVariable String flightNumber,@PathVariable LocalDate departureDate, @RequestBody Map<String, Object> updatedValues) {
+        return orchestrator.updateFlightSchedule(flightNumber, departureDate, updatedValues);
     }
 }

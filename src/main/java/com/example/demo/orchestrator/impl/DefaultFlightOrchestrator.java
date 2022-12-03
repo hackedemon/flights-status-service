@@ -16,11 +16,14 @@ import com.example.demo.service.FlightScheduleService;
 import com.example.demo.service.FlightService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.MutablePropertyValues;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.DataBinder;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @AllArgsConstructor
@@ -112,8 +115,30 @@ public class DefaultFlightOrchestrator implements FlightOrchestrator {
     }
 
     @Override
-    public ResponseEntity<Void> updateFlightSchedule(String flightNumber, Map<String, Object> updatedValues) {
-        return null;
+    public ResponseEntity<Void> updateFlightSchedule(
+            String flightNumber, LocalDate departureDate, Map<String, Object> updatedValues) {
+        var flightSchedule = flightScheduleService.getFlightSchedule(flightNumber, departureDate);
+
+        // Removing flightNumber as it should not be updated.
+        updatedValues.remove("flightNumber");
+
+        // TODO: Move this to separate method.
+        var flightScheduleRequest = new FlightScheduleRequest();
+        var db = new DataBinder(flightScheduleRequest);
+        var pvs = new MutablePropertyValues();
+        pvs.addPropertyValues(updatedValues);
+        db.bind(pvs);
+
+        if (Boolean.FALSE.equals(Objects.isNull(flightScheduleRequest.getArrivalDateTime())))
+            flightSchedule.setArrivalDateTime(flightScheduleRequest.getArrivalDateTime());
+        if (Boolean.FALSE.equals(Objects.isNull(flightScheduleRequest.getDepartureDateTime())))
+            flightSchedule.setDepartureDateTime(flightScheduleRequest.getDepartureDateTime());
+        if (Boolean.FALSE.equals(Objects.isNull(flightScheduleRequest.getStatus())))
+            flightSchedule.setStatus(flightScheduleRequest.getStatus());
+
+        flightScheduleService.updateFlightSchedule(flightSchedule);
+
+        return ResponseEntity.ok().build();
     }
 
     private static FlightStatus getFlightStatus(FlightSchedule flightSchedule) {

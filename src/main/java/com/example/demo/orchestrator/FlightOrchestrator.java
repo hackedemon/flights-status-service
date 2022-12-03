@@ -18,5 +18,6 @@ public interface FlightOrchestrator {
 
     ResponseEntity<Void> addFlightSchedule(FlightScheduleRequest flightScheduleRequest);
 
-    ResponseEntity<Void> updateFlightSchedule(String flightNumber, Map<String, Object> updatedValues);
+    ResponseEntity<Void> updateFlightSchedule(
+            String flightNumber, LocalDate departureDate, Map<String, Object> updatedValues);
 }

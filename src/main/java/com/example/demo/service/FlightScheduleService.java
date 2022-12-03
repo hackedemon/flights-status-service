@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.FlightSchedule;
 import com.example.demo.exception.impl.FlightNotFoundException;
+import com.example.demo.exception.impl.FlightScheduleAlreadyExistsException;
 import com.example.demo.exception.impl.FlightScheduleNotFoundException;
 
 import java.time.LocalDate;
@@ -20,5 +21,7 @@ public interface FlightScheduleService {
     FlightSchedule getFlightSchedule(String flightNumber, LocalDate departureDate)
             throws FlightNotFoundException, FlightScheduleNotFoundException;
 
-    void addFlightSchedule(FlightSchedule flightSchedule);
+    void addFlightSchedule(FlightSchedule flightSchedule) throws FlightScheduleAlreadyExistsException;
+
+    void updateFlightSchedule(FlightSchedule flightSchedule) throws FlightScheduleNotFoundException;
 }
