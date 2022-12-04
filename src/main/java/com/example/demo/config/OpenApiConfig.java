@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -23,11 +22,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         tags = {@Tag(name = "Public"), @Tag(name = "Admin")}
 )
 @SecurityScheme(
-        name = "authenticationToken",
-        description = "Enter api access token below",
-        scheme = "apiToken",
-        type = SecuritySchemeType.APIKEY,
-        in = SecuritySchemeIn.HEADER
+        name = "basicAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "basic"
 )
 public class OpenApiConfig {
 }

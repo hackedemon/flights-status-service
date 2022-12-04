@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("v1/flight")
+@RequestMapping("v1/flight/")
 public class DefaultFlightController implements FlightController {
     private FlightOrchestrator orchestrator;
 
@@ -52,7 +52,7 @@ public class DefaultFlightController implements FlightController {
     @Override
     @PatchMapping(value = "v1/flightSchedule/flightNumber/{flightNumber}/departureDate/{departureDate}")
     public ResponseEntity<Void> updateFlightSchedule(
-            @PathVariable String flightNumber,@PathVariable LocalDate departureDate, @RequestBody Map<String, Object> updatedValues) {
+            @PathVariable String flightNumber, @PathVariable LocalDate departureDate, @RequestBody Map<String, Object> updatedValues) {
         return orchestrator.updateFlightSchedule(flightNumber, departureDate, updatedValues);
     }
 }

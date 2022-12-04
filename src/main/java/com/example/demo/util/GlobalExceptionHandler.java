@@ -5,6 +5,7 @@ import com.example.demo.exception.InvalidRequestException;
 import com.example.demo.exception.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public @ResponseBody AppError handleAccessDeniedException(
+            AccessDeniedException accessDeniedException, WebRequest request) {
+        return AppError.builder()
+                .timeStamp(Instant.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(accessDeniedException.getMessage())
+                .path(request.getDescription(false))
+                .build();
+    }
+
     @ExceptionHandler(value = FlightNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public @ResponseBody AppError handleFlightNotFoundException(
