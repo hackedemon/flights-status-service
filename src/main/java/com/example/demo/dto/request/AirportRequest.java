@@ -3,9 +3,8 @@ package com.example.demo.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import static com.example.demo.constant.ValidationMessagesConstant.*;
 
@@ -13,13 +12,10 @@ import static com.example.demo.constant.ValidationMessagesConstant.*;
 @Setter
 public class AirportRequest {
     @NotBlank(message = AIRPORT_CODE_NOT_BLANK)
-    @Min(
-            value = 3,
-            message = AIRPORT_CODE_LENGTH
-    )
-    @Max(
-            value = 3,
-            message = AIRPORT_CODE_LENGTH
+    @Size(
+        min = 3,
+        max = 3,
+        message = AIRPORT_CODE_LENGTH
     )
     private String code;
 

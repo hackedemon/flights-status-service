@@ -56,6 +56,20 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!--Spring security dependency-->
+        <!--Logstash logback encoder-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.2</version>
+        </dependency>
+        <!--Logstash logback encoder-->
+        <!--Spring cloud sleuth encoder-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <version>3.1.5</version>
+        </dependency>
+        <!--Spring cloud sleuth encoder-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
