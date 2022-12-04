@@ -1,12 +1,12 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.enumeration.Status;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,10 +27,10 @@ public class FlightSchedule implements Serializable {
     @JoinColumn(name = "flight_id")
     private Flight flight;
 
-    @Future(message = "Departure can't be in past.")
+    @FutureOrPresent(message = "Departure can't be in past.")
     private LocalDate departureDate;
 
-    @Future(message = "Arrival can't be in past.")
+    @FutureOrPresent(message = "Arrival can't be in past.")
     private LocalDate arrivalDate;
 
     @NotNull(message = "Departure time can't be null.")

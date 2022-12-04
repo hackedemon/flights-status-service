@@ -9,14 +9,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.validation.Valid;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Map;
 
-@SecurityRequirement(name = "basicAuth")
 public interface FlightController {
     @Operation(
             operationId = "getFlightStatus",
@@ -90,7 +96,15 @@ public interface FlightController {
                     )
             }
     )
-    ResponseEntity<FlightStatus> getFlightStatus(String flightNumber, LocalDate travelDate);
+    ResponseEntity<FlightStatus> getFlightStatus(
+            @PathVariable(name = "flightNumber")
+            @NotBlank(message = "Flight number can't be blank.")
+            @Size(min = 1)
+            String flightNumber,
+            @PathVariable(name = "travelDate")
+            @FutureOrPresent(message = "Travel date can only be today's or in future.")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate travelDate);
 
     @Operation(
             operationId = "addAirport",
@@ -140,7 +154,7 @@ public interface FlightController {
                     )
             }
     )
-    ResponseEntity<Void> addAirport(AirportRequest airportRequest);
+    ResponseEntity<Void> addAirport(@Valid AirportRequest airportRequest);
 
     @Operation(
             operationId = "addFlight",
@@ -190,7 +204,7 @@ public interface FlightController {
                     )
             }
     )
-    ResponseEntity<Void> addFlight(FlightRequest flightRequest);
+    ResponseEntity<Void> addFlight(@Valid FlightRequest flightRequest);
 
     @Operation(
             operationId = "addFlightSchedule",
@@ -242,7 +256,7 @@ public interface FlightController {
                     )
             }
     )
-    ResponseEntity<Void> addFlightSchedule(FlightScheduleRequest flightScheduleRequest);
+    ResponseEntity<Void> addFlightSchedule(@Valid FlightScheduleRequest flightScheduleRequest);
 
     @Operation(
             operationId = "updateFlightSchedule",
@@ -310,5 +324,12 @@ public interface FlightController {
             }
     )
     ResponseEntity<Void> updateFlightSchedule(
-            String flightNumber, LocalDate departureDate, Map<String, Object> updatedValues);
+            @PathVariable
+            @NotBlank(message = "Flight number can't be null/blank.")
+            String flightNumber,
+            @PathVariable
+            @NotNull(message = "Travel date can't be null.")
+            @FutureOrPresent(message = "Can't modify past flight schedule.'")
+            LocalDate departureDate,
+            @RequestBody Map<String, Object> updatedValues);
 }

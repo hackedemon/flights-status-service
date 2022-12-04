@@ -31,44 +31,34 @@
         </rollingPolicy>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="RollingFile"/>
-        <appender-ref ref="Console"/>
-    </root>
-
-    <logger name="FILE" additivity="false">
-        <appender-ref ref="RollingFile"/>
-    </logger>
-
     <springProfile name="!(dev | qa | prod)">
-        <logger name="org.springframework" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
+        <logger name="org.springframework" level="INFO" additivity="false">
+            <appender-ref ref="Console"/>
         </logger>
-        <root level="TRACE">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
+        <root level="DEBUG">
+            <appender-ref ref="RollingFile"/>
         </root>
     </springProfile>
 
     <springProfile name="dev">
         <logger name="org.springframework" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="Console"/>
         </logger>
         <root level="DEBUG">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFile"/>
         </root>
     </springProfile>
 
     <springProfile name="qa">
         <root level="INFO">
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="RollingFile"/>
         </root>
     </springProfile>
 
     <springProfile name="prod">
         <root level="ERROR">
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="RollingFile"/>
         </root>
     </springProfile>
 

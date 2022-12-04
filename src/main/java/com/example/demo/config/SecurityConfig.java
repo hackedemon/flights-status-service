@@ -38,17 +38,18 @@ public class SecurityConfig {
                 .disable()
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/index.html","/swagger-ui/**").permitAll()
+                        .antMatchers("/", "/index.html", "/swagger-ui.html", "/swagger-ui/**")
+                        .permitAll()
                 )
-                .authorizeHttpRequests( (auth) -> auth
-                        .requestMatchers("/v1/flight/v1/status/**")
+                .authorizeHttpRequests((auth) -> auth
+                        .antMatchers("/v1/flight/v1/status/**")
                         .hasAnyRole("PUBLIC", "ADMIN")
                 )
-                .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/v1/flight/v1/airport","/v1/flight/v1/flight",
+                .authorizeHttpRequests(auth -> auth
+                        .antMatchers("/v1/flight/v1/airport", "/v1/flight/v1/flight",
                                 "/v1/flight/v1/flightSchedule/**")
                         .hasRole("ADMIN")
-                        .anyRequest().anonymous())
+                        .anyRequest().authenticated())
 
                 .httpBasic()
                 .and()

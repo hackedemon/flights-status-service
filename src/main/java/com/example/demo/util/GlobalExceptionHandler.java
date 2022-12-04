@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.validation.ConstraintViolationException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -134,18 +133,38 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(value = BindException.class)
+    @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody AppError handleBindException(
-            BindException bindException, WebRequest request) {
-        List<String> errorFields = new ArrayList<>();
-        for (var e : bindException.getFieldErrors()) {
-            errorFields.add(e.getField());
+            ConstraintViolationException constraintViolationException, WebRequest request) {
+        Set<String> errorFields = new HashSet<>();
+        Set<String> errorMessages = new HashSet<>();
+        for (var e : constraintViolationException.getConstraintViolations()) {
+            errorFields.add(e.getPropertyPath().toString());
+            errorMessages.add(e.getMessage());
         }
         return AppError.builder()
                 .timeStamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("Invalid input in field(s) " + errorFields)
+                .message("Invalid value in field(s) " + errorFields + " with errors " + errorMessages)
+                .path(request.getDescription(false))
+                .build();
+    }
+
+    @ExceptionHandler(value = BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody AppError handleBindException(
+            BindException bindException, WebRequest request) {
+        Set<String> errorFields = new HashSet<>();
+        Set<String> errorMessages = new HashSet<>();
+        for (var e : bindException.getFieldErrors()) {
+            errorFields.add(e.getField());
+            errorMessages.add(e.getDefaultMessage());
+        }
+        return AppError.builder()
+                .timeStamp(Instant.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Invalid value in field(s) " + errorFields + " with errors " + errorMessages)
                 .path(request.getDescription(false))
                 .build();
     }
