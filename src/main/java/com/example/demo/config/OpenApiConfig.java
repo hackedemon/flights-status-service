@@ -1,10 +1,8 @@
 package com.example.demo.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -20,11 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                         email = "placeholder@email.com")),
         servers = @Server(url = ""),
         tags = {@Tag(name = "Public"), @Tag(name = "Admin")}
-)
-@SecurityScheme(
-        name = "basicAuth",
-        type = SecuritySchemeType.HTTP,
-        scheme = "basic"
 )
 public class OpenApiConfig {
 }
