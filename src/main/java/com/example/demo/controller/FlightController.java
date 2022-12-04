@@ -5,6 +5,7 @@ import com.example.demo.dto.request.FlightRequest;
 import com.example.demo.dto.request.FlightScheduleRequest;
 import com.example.demo.dto.response.FlightStatus;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +23,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Map;
+
+import static com.example.demo.constant.ValidationMessagesConstant.*;
 
 public interface FlightController {
     @Operation(
@@ -97,12 +100,18 @@ public interface FlightController {
             }
     )
     ResponseEntity<FlightStatus> getFlightStatus(
+            @Parameter(description = "Flight number for which status is required. Value is case sensitive.",
+                    schema = @Schema(example = "EW 0001"))
             @PathVariable(name = "flightNumber")
-            @NotBlank(message = "Flight number can't be blank.")
+            @NotBlank(message = FLIGHT_NUMBER_NOT_BLANK)
             @Size(min = 1)
             String flightNumber,
+            @Parameter(description = """
+                    Date of travel in format <strong>yyyy-mm-dd</strong>. Date of travel can only be today or future.
+                    """,
+                    schema = @Schema(example = "2022-12-14"))
             @PathVariable(name = "travelDate")
-            @FutureOrPresent(message = "Travel date can only be today's or in future.")
+            @FutureOrPresent(message = TRAVEL_DATE_IN_PAST)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate travelDate);
 
@@ -325,11 +334,11 @@ public interface FlightController {
     )
     ResponseEntity<Void> updateFlightSchedule(
             @PathVariable
-            @NotBlank(message = "Flight number can't be null/blank.")
+            @NotBlank(message = FLIGHT_NUMBER_NOT_BLANK)
             String flightNumber,
             @PathVariable
-            @NotNull(message = "Travel date can't be null.")
-            @FutureOrPresent(message = "Can't modify past flight schedule.'")
+            @NotNull(message = TRAVEL_DATE_NOT_NULL)
+            @FutureOrPresent(message = DEPARTURE_DATE_IN_PAST)
             LocalDate departureDate,
             @RequestBody Map<String, Object> updatedValues);
 }

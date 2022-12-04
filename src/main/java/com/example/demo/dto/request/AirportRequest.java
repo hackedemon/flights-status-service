@@ -7,20 +7,22 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import static com.example.demo.constant.ValidationMessagesConstant.*;
+
 @Getter
 @Setter
 public class AirportRequest {
-    @NotBlank(message = "code can't be null/blank.")
+    @NotBlank(message = AIRPORT_CODE_NOT_BLANK)
     @Min(
             value = 3,
-            message = "Length of airport code should be 3."
+            message = AIRPORT_CODE_LENGTH
     )
     @Max(
             value = 3,
-            message = "Length of airport code should be 3."
+            message = AIRPORT_CODE_LENGTH
     )
     private String code;
 
-    @NotBlank(message = "name can't be null/blank.")
+    @NotBlank(message = AIRPORT_CODE_NAME_NOT_BLANK)
     private String name;
 }
